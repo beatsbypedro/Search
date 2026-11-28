@@ -172,6 +172,9 @@ enum ExtensionNative {
                         guard !port.isDisconnected else { timer.invalidate(); return }
                         port.sendMessage(["__searchNative": "alive"], completionHandler: nil)
                     }
+                    // Some slack lets macOS batch the beat; 30 s at most is still far inside
+                    // the two minutes WebKit allows.
+                    beating?.tolerance = 5
                 }
                 return
             }

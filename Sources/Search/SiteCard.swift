@@ -194,9 +194,11 @@ enum SiteCardPanel {
     private static var follower: Timer?
     private static func keepUnder(_ browser: Browser) {
         follower?.invalidate()
-        follower = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak browser] _ in
+        follower = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak browser] timer in
             MainActor.assumeIsolated {
-                guard let browser, let panel, let field = field(in: browser), let spot = spot(of: field) else { return }
+                // With the browser or the card gone there is nothing left to follow.
+                guard let browser, panel != nil else { return timer.invalidate() }
+                guard let panel, let field = field(in: browser), let spot = spot(of: field) else { return }
                 let (origin, _) = placement(panel.frame.size, under: spot, on: field.window?.screen)
                 if panel.frame.origin != origin { panel.setFrameOrigin(origin) }
             }

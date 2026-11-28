@@ -895,6 +895,7 @@ final class ICloudSync: ObservableObject {
                 if self.ticks % 10 == 0 { self.refresh() } else { self.publish() }
             }
         }
+        timer?.tolerance = 5 // Lets macOS batch this wakeup with others.
         // Joined before (a relaunch): what changed meanwhile, both ways.
         // Otherwise the first fetch, then the merge.
         detach { sync in

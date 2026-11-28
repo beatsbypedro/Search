@@ -229,9 +229,10 @@ final class Float {
             uncover()
         }
 
-        ticker = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
+        ticker = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
             MainActor.assumeIsolated {
-                guard let self else { return }
+                // Gone without drop(), the timer would otherwise tick forever.
+                guard let self else { return timer.invalidate() }
 
                 // A window that no longer holds the page has nothing to show
                 // and no reason to exist. Something else took the page back —

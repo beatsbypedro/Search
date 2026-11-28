@@ -252,6 +252,7 @@ final class Sync: ObservableObject {
         timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.pass() }
         }
+        timer?.tolerance = 5 // Lets macOS batch this wakeup with others.
         schedule(after: 1)
     }
 

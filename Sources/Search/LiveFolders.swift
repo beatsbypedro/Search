@@ -36,6 +36,7 @@ enum LiveFolders {
         timer = Timer.scheduledTimer(withTimeInterval: every, repeats: true) { _ in
             MainActor.assumeIsolated { refreshAll() }
         }
+        timer?.tolerance = 5 * 60 // Lets macOS batch this wakeup with others.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) { refreshAll() }
     }
 
